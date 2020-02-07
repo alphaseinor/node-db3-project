@@ -10,25 +10,46 @@ module.exports = {
 }
 
 function find(){
+  return db("schemes")
+}
+
+function findById(id){
+  return db("schemes")
+          .where({id})
+          .first()
 
 }
 
-function findById(){
-
+function findSteps(id){
+  return db("steps")
+          .orderBy("step_number")
+          .join("schemes", "steps.scheme_id", "schemes_id")
+          .where("schemes.id", id)
 }
 
-function findSteps(){
-
+function add(scheme){
+  return db("schemes")
+          .insert(scheme, "id")
+          .then(id => {
+            return findById(id[0])
+          })
 }
 
-function add(){
-
+function update(change, id){
+  return db("schemes")
+          .where({id})
+          .update(change)
+          .then(() => {
+            return findById(id)
+          })
 }
 
-function update(){
-
-}
-
-function remove(){
-  
+function remove(id){
+  return db("schemes")
+          .where({id})
+          .delete()
+          .then(() => {
+            return findById(id)
+                    .then(x => x)
+          })
 }
