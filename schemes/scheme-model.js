@@ -44,12 +44,12 @@ function update(change, id){
           })
 }
 
-function remove(id){
+async function remove(id){
+  const found = await findById(id)
   return db("schemes")
           .where({id})
           .delete()
           .then(() => {
-            return findById(id)
-                    .then(x => x)
+            return found
           })
 }
